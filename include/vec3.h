@@ -3,14 +3,15 @@
 
 #include <cmath>
 #include <iostream>
+#include <cstdint>
 #include <stdexcept>
 
 template<typename T>
 class Vec3
 {
-private:
-    T E[3] = {0};
 public:
+    T E[3] = {0};
+
     Vec3() {}
     Vec3(T X) { E[0] = X, E[1] = X, E[2] = X; }
     Vec3(T X, T Y, T Z) { E[0] = X, E[1] = Y, E[2] = Z; }
@@ -145,6 +146,10 @@ inline Vec3<T> operator*(const Vec3<T> &V, const float Val)
 {
     return Vec3<T>(Val * V.X(), Val * V.Y(), Val * V.Z());
 }
+
+using Vec3f = Vec3<float>;
+using Vec3i = Vec3<int>;
+using Color = Vec3<std::uint8_t>;
 
 #endif // VEC3_H
 
