@@ -10,6 +10,7 @@ set(CMAKE_CXX_COMPILER clang++)
 add_executable(${CMAKE_PROJECT_NAME}
     src/main.cpp
     src/vec3.cpp
+    src/ray.cpp
     )
 
 target_include_directories(${CMAKE_PROJECT_NAME}

@@ -39,6 +39,11 @@ public:
     inline T operator[] (int i) const { return E[i]; }
     inline T& operator[] (int i) { return E[i]; };
 
+    template<typename T2>
+    inline operator Vec3<T2>() const {
+        return Vec3<T2>(E[0], E[1], E[2]);
+    }
+
     inline Vec3<T>& operator+= (const Vec3<T>& V)
     {
         E[0] += V.E[0];
@@ -101,7 +106,7 @@ public:
 template <typename T>
 inline std::ostream& operator << (std::ostream& Os, const Vec3<T>& V)
 {
-    Os << "[" << V.X() << " " << V.Y() << " " << V.Z() << "]";
+    Os << "[" << +V.X() << " " << +V.Y() << " " << +V.Z() << "]";
     return Os;
 }
 
@@ -148,6 +153,7 @@ inline Vec3<T> operator*(const Vec3<T> &V, const float Val)
 }
 
 using Vec3f = Vec3<float>;
+using Vec3d = Vec3<double>;
 using Vec3i = Vec3<int>;
 using Color = Vec3<std::uint8_t>;
 
