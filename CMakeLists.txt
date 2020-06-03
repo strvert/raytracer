@@ -13,6 +13,7 @@ add_executable(${CMAKE_PROJECT_NAME}
     src/ray.cpp
 
     src/sphere.cpp
+    src/hitable.cpp
     )
 
 target_include_directories(${CMAKE_PROJECT_NAME}

@@ -1,6 +1,6 @@
 #include "ray.h"
 
-Color Ray::ToScreenLerpColor(Color Col1, Color Col2)
+Color Ray::ToScreenLerpColor(Color Col1, Color Col2) const
 {
     Vec3f UnitDir = Dir.Normalize();
     float T = 0.5 * (UnitDir.Y() + 1.0);

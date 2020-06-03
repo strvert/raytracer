@@ -23,15 +23,18 @@ public:
     inline T G() const { return E[1]; }
     inline T B() const { return E[2]; }
 
-    Vec3<T>& Normalize()
+    Vec3<T> Normalize() const
     {
         T Nor2 = SquaredLength();
+        Vec3<T> RetV(0);
         if (Nor2 > 0)
         {
             T InvNor = 1 / std::sqrt(Nor2);
-            E[0] *= InvNor, E[1] *= InvNor, E[2] *= InvNor;
+            RetV.E[0] = E[0] * InvNor;
+            RetV.E[1] = E[1] * InvNor;
+            RetV.E[2] = E[2] * InvNor;
         }
-        return *this;
+        return RetV;
     }
 
     inline const Vec3<T>& operator+ () const { return *this; }
@@ -134,9 +137,33 @@ inline Vec3<T> operator/(const Vec3<T> &V1, const Vec3<T> &V2)
 }
 
 template <typename T>
-inline Vec3<T> operator*(double Val, const Vec3<T> &V)
+inline Vec3<T> operator*(const double Val, const Vec3<T> &V)
 {
     return Vec3<T>(Val * V.X(), Val * V.Y(), Val * V.Z());
+}
+
+template <typename T>
+inline Vec3<T> operator+(const double Val, const Vec3<T> &V)
+{
+    return Vec3<T>(V.X() + Val, V.Y() + Val, V.Z() + Val);
+}
+
+template <typename T>
+inline Vec3<T> operator+(const Vec3<T> &V, const double Val)
+{
+    return Vec3<T>(V.X() + Val, V.Y() + Val, V.Z() + Val);
+}
+
+template <typename T>
+inline Vec3<T> operator-(const double Val, const Vec3<T> &V)
+{
+    return Vec3<T>(V.X() - Val, V.Y() - Val, V.Z() - Val);
+}
+
+template <typename T>
+inline Vec3<T> operator-(const Vec3<T> &V, const double Val)
+{
+    return Vec3<T>(V.X() - Val, V.Y() - Val, V.Z() - Val);
 }
 
 template <typename T>
@@ -154,7 +181,6 @@ inline Vec3<T> operator*(const Vec3<T> &V, const double Val)
 using Vec3f = Vec3<float>;
 using Vec3d = Vec3<double>;
 using Vec3i = Vec3<int>;
-using Color = Vec3<std::uint8_t>;
 
 #endif // VEC3_H
 

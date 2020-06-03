@@ -1,18 +1,21 @@
 #include <iostream>
+#include <memory>
+#include <limits>
 #include <SFML/Graphics.hpp>
 
 #include "vec3.h"
 #include "ray.h"
 #include "sphere.h"
+#include "color.h"
+
+const unsigned int WINDOW_WIDTH = 800;
+const unsigned int WINDOW_HEIGHT = 400;
 
 void SetPixel(sf::Texture& Tex, unsigned X, unsigned Y, Color C)
 {
     auto Size = Tex.getSize();
     Tex.update(reinterpret_cast<sf::Uint8*>(&C), 1, 1, Size.x - X, Size.y - Y);
 }
-
-const unsigned int WINDOW_WIDTH = 800;
-const unsigned int WINDOW_HEIGHT = 400;
 
 int main()
 {
@@ -28,7 +31,9 @@ int main()
     Vec3f Vertical(0.0, 2.0, 0.0);
     Vec3f Origin(0.0, 0.0, 0.0);
 
-    Sphere S1(Vec3f(0, 0, -1), 0.55);
+    HitableList List;
+    List.Add(std::make_unique<Sphere>(Vec3f(0, 0, -1), 0.4));
+    List.Add(std::make_unique<Sphere>(Vec3f(0.5, 0, -1), 0.4));
 
     for (int j = 0; j < WINDOW_HEIGHT; j++)
     {
@@ -39,7 +44,11 @@ int main()
             Ray R(Origin, LowerLeftCorner + U*Horizonal + V*Vertical);
 
             SetPixel(Tex, i, j, R.ToScreenLerpColor(Color(255, 255, 255), Color(127, 179, 255)));
-            if (S1.Intersect(R)) { SetPixel(Tex, i, j, Color(255, 0, 0)); }
+            HitRecord Rec;
+            if (List.Hit(R, 0.0, std::numeric_limits<float>::max(), Rec))
+            {
+                SetPixel(Tex, i, j, (1+Rec.N)*127);
+            }
         }
         window.draw(Sprt);
         window.display();
