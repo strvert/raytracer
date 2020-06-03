@@ -10,7 +10,7 @@ template<typename T>
 class Vec3
 {
 public:
-    T E[3] = {0};
+    T E[4] = { 0, 0, 0, 255 };
 
     Vec3() {}
     Vec3(T X) { E[0] = X, E[1] = X, E[2] = X; }
@@ -39,47 +39,47 @@ public:
     inline T operator[] (int i) const { return E[i]; }
     inline T& operator[] (int i) { return E[i]; };
 
-    template<typename T2>
-    inline operator Vec3<T2>() const {
-        return Vec3<T2>(E[0], E[1], E[2]);
+    template<typename CastType>
+    inline operator Vec3<CastType>() const {
+        return Vec3<CastType>(E[0], E[1], E[2]);
     }
 
-    inline Vec3<T>& operator+= (const Vec3<T>& V)
+    Vec3<T>& operator+= (const Vec3<T>& V)
     {
         E[0] += V.E[0];
         E[1] += V.E[1];
         E[2] += V.E[2];
         return *this;
     }
-    inline Vec3<T>& operator-= (const Vec3<T>& V)
+    Vec3<T>& operator-= (const Vec3<T>& V)
     {
         E[0] -= V.E[0];
         E[1] -= V.E[1];
         E[2] -= V.E[2];
         return *this;
     }
-    inline Vec3<T>& operator*= (const Vec3<T>& V)
+    Vec3<T>& operator*= (const Vec3<T>& V)
     {
         E[0] *= V.E[0];
         E[1] *= V.E[1];
         E[2] *= V.E[2];
         return *this;
     }
-    inline Vec3<T>& operator/= (const Vec3<T>& V)
+    Vec3<T>& operator/= (const Vec3<T>& V)
     {
         E[0] /= V.E[0];
         E[1] /= V.E[1];
         E[2] /= V.E[2];
         return *this;
     }
-    inline Vec3<T>& operator*= (const float Val)
+    Vec3<T>& operator*= (const double Val)
     {
         E[0] *= Val;
         E[1] *= Val;
         E[2] *= Val;
         return *this;
     }
-    inline Vec3<T>& operator/= (const float Val)
+    Vec3<T>& operator/= (const double Val)
     {
         E[0] /= Val;
         E[1] /= Val;
@@ -87,9 +87,8 @@ public:
         return *this;
     }
 
-    T Dot(const Vec3<T> &V) const
-    {
-        return X() * V.X() + Y() * V.Y() + Z() * V.Z;
+    T Dot(const Vec3<T> &V) const {
+        return X() * V.X() + Y() * V.Y() + Z() * V.Z();
     }
     Vec3<T> Cross(const Vec3<T> &V) const
     {
@@ -135,19 +134,19 @@ inline Vec3<T> operator/(const Vec3<T> &V1, const Vec3<T> &V2)
 }
 
 template <typename T>
-inline Vec3<T> operator*(const float Val, const Vec3<T> &V)
+inline Vec3<T> operator*(double Val, const Vec3<T> &V)
 {
     return Vec3<T>(Val * V.X(), Val * V.Y(), Val * V.Z());
 }
 
 template <typename T>
-inline Vec3<T> operator/(const Vec3<T> &V, const float Val)
+inline Vec3<T> operator/(const Vec3<T> &V, const double Val)
 {
     return Vec3<T>(V.X() / Val, V.Y() / Val, V.Z() / Val);
 }
 
 template <typename T>
-inline Vec3<T> operator*(const Vec3<T> &V, const float Val)
+inline Vec3<T> operator*(const Vec3<T> &V, const double Val)
 {
     return Vec3<T>(Val * V.X(), Val * V.Y(), Val * V.Z());
 }

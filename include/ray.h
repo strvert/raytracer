@@ -12,10 +12,11 @@ private:
 public:
     Ray() {}
     Ray(const Vec3f& Orig, const Vec3f& Dir) : Orig(Orig), Dir(Dir) {}
-    Vec3f Origin() const { return Orig; }
-    Vec3f Direction() const { return Dir; }
-    Vec3f PointAtParameter(float t) const { return Orig + t*Dir; }
-    Color ToScreenLerpColor(Color Col);
+
+    inline Vec3f Origin() const { return Orig; }
+    inline Vec3f Direction() const { return Dir; }
+    inline Vec3f PointAtParameter(float t) const { return Orig + t*Dir; }
+    Color ToScreenLerpColor(Color Col1, Color Col2);
 };
 
 #endif // RAY_H

@@ -3,16 +3,12 @@
 
 #include "vec3.h"
 #include "ray.h"
+#include "sphere.h"
 
-void SetPixel(sf::Texture& Tex, unsigned X, unsigned Y, Color& C)
+void SetPixel(sf::Texture& Tex, unsigned X, unsigned Y, Color C)
 {
-    Tex.update(reinterpret_cast<sf::Uint8*>(&C), 1, 1, X, Y);
-}
-
-void SetPixel(sf::Texture& Tex, unsigned X, unsigned Y, Vec3f& V)
-{
-    Color Col(V.X(), V.Y(), V.Z());
-    SetPixel(Tex, X, Y, Col);
+    auto Size = Tex.getSize();
+    Tex.update(reinterpret_cast<sf::Uint8*>(&C), 1, 1, Size.x - X, Size.y - Y);
 }
 
 const unsigned int WINDOW_WIDTH = 800;
@@ -32,23 +28,24 @@ int main()
     Vec3f Vertical(0.0, 2.0, 0.0);
     Vec3f Origin(0.0, 0.0, 0.0);
 
+    Sphere S1(Vec3f(0, 0, -1), 0.55);
+
     for (int j = 0; j < WINDOW_HEIGHT; j++)
     {
         for (int i = 0; i < WINDOW_WIDTH; i++)
         {
             float U = float(i) / float(WINDOW_WIDTH);
             float V = float(j) / float(WINDOW_HEIGHT);
-            // float B = 0.2f;
-            // auto C = Color(int(255.99*R), int(255.99*G), int(255.99*B));
+            Ray R(Origin, LowerLeftCorner + U*Horizonal + V*Vertical);
 
-            Ray ColRay(Origin, LowerLeftCorner + U*Horizonal + V*Vertical);
-            Color Col = ColRay.ToScreenLerpColor(Color(127, 179, 255));
-            SetPixel(Tex, i, j, Col);
+            SetPixel(Tex, i, j, R.ToScreenLerpColor(Color(255, 255, 255), Color(127, 179, 255)));
+            if (S1.Intersect(R)) { SetPixel(Tex, i, j, Color(255, 0, 0)); }
         }
         window.draw(Sprt);
         window.display();
     }
 
+    Tex.copyToImage().saveToFile("./image.png");
 
     while (window.isOpen())
     {
