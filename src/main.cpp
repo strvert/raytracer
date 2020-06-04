@@ -38,7 +38,7 @@ Vec3f RandInUnitSphere()
 Color ScreenColor(const Ray& R, std::shared_ptr<Hitable> World)
 {
     HitRecord Rec;
-    if (World->Hit(R, 0, std::numeric_limits<float>::max(), Rec))
+    if (World->Hit(R, 0.001, std::numeric_limits<float>::max(), Rec))
     {
         Vec3f Target = Rec.P + Rec.N + RandInUnitSphere();
         return 0.5*ScreenColor(Ray(Rec.P, Target-Rec.P), World);
@@ -59,7 +59,8 @@ int main()
     Sprt.setTexture(Tex);
 
     auto List = std::make_shared<HitableList>();
-    List->Add(std::make_unique<Sphere>(Vec3f(0, 0, -1), 0.5));
+    List->Add(std::make_unique<Sphere>(Vec3f(0, 0.5, -1), 0.5));
+    List->Add(std::make_unique<Sphere>(Vec3f(3, 1, -4), 0.5));
     List->Add(std::make_unique<Sphere>(Vec3f(0.0, -100.5, -1), 100));
 
     Camera Cam;
@@ -76,7 +77,8 @@ int main()
                 Ray R = Cam.GetRay(U, V);
                 ColorSum += ScreenColor(R, List);
             }
-            Color C = ColorSum / NS;
+            Vec3f Cf = (ColorSum / NS) / 255.0;
+            Color C = Vec3f(std::sqrt(Cf.X()), std::sqrt(Cf.Y()), std::sqrt(Cf.Z())) * 255;
             SetPixel(Tex, i, j, C);
         }
         window.draw(Sprt);
