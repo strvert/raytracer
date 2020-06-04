@@ -11,7 +11,7 @@ add_executable(${CMAKE_PROJECT_NAME}
     src/main.cpp
     src/vec3.cpp
     src/ray.cpp
-
+    src/camera.cpp
     src/sphere.cpp
     src/hitable.cpp
     )
