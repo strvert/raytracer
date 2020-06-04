@@ -58,11 +58,6 @@ int main()
     sf::Sprite Sprt;
     Sprt.setTexture(Tex);
 
-    Vec3f LowerLeftCorner(-2.0, -1.0, -1.0);
-    Vec3f Horizonal(4.0, 0.0, 0.0);
-    Vec3f Vertical(0.0, 2.0, 0.0);
-    Vec3f Origin(0.0, 0.0, 0.0);
-
     auto List = std::make_shared<HitableList>();
     List->Add(std::make_unique<Sphere>(Vec3f(0, 0, -1), 0.5));
     List->Add(std::make_unique<Sphere>(Vec3f(0.0, -100.5, -1), 100));
