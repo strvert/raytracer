@@ -3,6 +3,8 @@
 #include <random>
 #include <limits>
 #include <cstdint>
+#include <thread>
+#include <chrono>
 #include <SFML/Graphics.hpp>
 
 #include "vec3.h"
@@ -14,6 +16,8 @@
 const unsigned int WINDOW_WIDTH = 800;
 const unsigned int WINDOW_HEIGHT = 400;
 const unsigned int NS = 100;
+const unsigned int RENDER_CELL_SIZE = 200;
+const bool PARALLEL = false;
 
 std::random_device Rnd;
 std::mt19937 Mt(Rnd());
@@ -26,6 +30,12 @@ void SetPixel(sf::Texture& Tex, unsigned X, unsigned Y, Color C)
     Tex.update(reinterpret_cast<sf::Uint8*>(&C), 1, 1, Size.x - X, Size.y - Y);
 }
 
+void SetLinePixels(sf::Texture& Tex, unsigned X, unsigned Y, const std::vector<Color>& C)
+{
+    auto Size = Tex.getSize();
+    Tex.update(reinterpret_cast<const sf::Uint8*>(C.data()), C.size(), 1, Size.x - X, Size.y - Y);
+}
+
 Vec3f RandInUnitSphere()
 {
     Vec3f P;
@@ -35,7 +45,7 @@ Vec3f RandInUnitSphere()
     return P;
 }
 
-Color ScreenColor(const Ray& R, std::shared_ptr<Hitable> World)
+Color ScreenColor(const Ray& R, const std::shared_ptr<Hitable> World)
 {
     HitRecord Rec;
     if (World->Hit(R, 0.001, std::numeric_limits<float>::max(), Rec))
@@ -49,24 +59,12 @@ Color ScreenColor(const Ray& R, std::shared_ptr<Hitable> World)
     }
 }
 
-int main()
+void RenderProc(sf::Texture& Tex, const Camera& Cam, const std::shared_ptr<Hitable> List, const unsigned X, const unsigned Y, const unsigned SizeX, const unsigned SizeY)
 {
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "raytracer", sf::Style::Titlebar | sf::Style::Close);
-
-    sf::Texture Tex;
-    Tex.create(WINDOW_WIDTH, WINDOW_HEIGHT);
-    sf::Sprite Sprt;
-    Sprt.setTexture(Tex);
-
-    auto List = std::make_shared<HitableList>();
-    List->Add(std::make_unique<Sphere>(Vec3f(0, 0.5, -1), 0.5));
-    List->Add(std::make_unique<Sphere>(Vec3f(3, 1, -4), 0.5));
-    List->Add(std::make_unique<Sphere>(Vec3f(0.0, -100.5, -1), 100));
-
-    Camera Cam;
-    for (int j = 0; j < WINDOW_HEIGHT; j++)
+    std::vector<Color> Map(SizeX*SizeY, Color(0));
+    for (unsigned i = X; i < X + SizeX; i++)
     {
-        for (int i = 0; i < WINDOW_WIDTH; i++)
+        for (unsigned j = Y; j < Y + SizeY; j++)
         {
             Vec3f ColorSum(0, 0, 0);
             for (int s = 0; s < NS; s++)
@@ -78,22 +76,69 @@ int main()
                 ColorSum += ScreenColor(R, List);
             }
             Vec3f Cf = (ColorSum / NS) / 255.0;
-            Color C = Vec3f(std::sqrt(Cf.X()), std::sqrt(Cf.Y()), std::sqrt(Cf.Z())) * 255;
-            SetPixel(Tex, i, j, C);
+            Map[(j-Y)*SizeX + (i-X)] = Vec3f(std::sqrt(Cf.X()), std::sqrt(Cf.Y()), std::sqrt(Cf.Z())) * 255;
         }
-        window.draw(Sprt);
-        window.display();
+    }
+    Tex.update(reinterpret_cast<sf::Uint8*>(Map.data()), SizeX, SizeY, X, Y);
+}
+
+int main()
+{
+    sf::RenderWindow Window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "raytracer", sf::Style::Titlebar | sf::Style::Close);
+
+    sf::Texture Tex;
+    Tex.create(WINDOW_WIDTH, WINDOW_HEIGHT);
+    sf::Sprite Sprt;
+    Sprt.setTexture(Tex);
+    Sprt.setOrigin({Sprt.getLocalBounds().width, Sprt.getLocalBounds().height});
+    Sprt.setScale(-1.0, -1.0);
+
+    auto List = std::make_shared<HitableList>();
+    List->Add(std::make_unique<Sphere>(Vec3f(0, 0, -1), 0.5));
+    List->Add(std::make_unique<Sphere>(Vec3f(3, 1, -4), 0.5));
+    List->Add(std::make_unique<Sphere>(Vec3f(0.0, -100.5, -1), 100));
+
+    Camera Cam;
+
+    std::chrono::system_clock::time_point start, end;
+    start = std::chrono::system_clock::now();
+
+    if (PARALLEL)
+    {
+        std::vector<std::thread> Threads;
+        for (int i = 0; i < WINDOW_WIDTH / RENDER_CELL_SIZE; i++ )
+        {
+            for (int j = 0; j < WINDOW_HEIGHT / RENDER_CELL_SIZE; j++ )
+            {
+                Threads.push_back(std::thread(RenderProc, std::ref(Tex), std::ref(Cam), List, i * RENDER_CELL_SIZE, j * RENDER_CELL_SIZE, RENDER_CELL_SIZE, RENDER_CELL_SIZE));
+            }
+        }
+        for (auto& Th: Threads)
+        {
+            Th.join();
+            Window.draw(Sprt);
+            Window.display();
+        }
+    }
+    else
+    {
+        RenderProc(Tex, Cam, List, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+        Window.draw(Sprt);
+        Window.display();
     }
 
-    Tex.copyToImage().saveToFile("./image.png");
+    end = std::chrono::system_clock::now();
+    double elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
+    std::cout << float(elapsed / 1000) << "(sec)" << std::endl;
 
-    while (window.isOpen())
+    Tex.copyToImage().saveToFile("./image.png");
+    while (Window.isOpen())
     {
         sf::Event event;
-        if (!window.pollEvent(event)) continue;
+        if (!Window.pollEvent(event)) continue;
         if (event.type == sf::Event::Closed)
         {
-            window.close();
+            Window.close();
         }
     }
 }

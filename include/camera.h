@@ -19,7 +19,7 @@ public:
         Origin = Vec3f(0.0, 0.0, 0.0);
     }
 
-    Ray GetRay(float U, float V) { return Ray(Origin, (LowerLeftCorner + U*Horizonal + V*Vertical) - Origin); }
+    Ray GetRay(float U, float V) const { return Ray(Origin, (LowerLeftCorner + U*Horizonal + V*Vertical) - Origin); }
 };
 
 #endif // CAMERA_H
