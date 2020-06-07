@@ -18,8 +18,9 @@ private:
 
 public:
     Color Albedo;
+    float Rough;
 
-    Metal(const Color A) : Albedo(A) {}
+    Metal(const Color& A, const float R) : Albedo(A), Rough(R) {}
     virtual ~Metal() {}
 
     virtual bool Scatter(const Ray& RIn, const HitRecord& Rec, Color& Attenuation, Ray& Scattered) const override;

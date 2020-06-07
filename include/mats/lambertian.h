@@ -12,7 +12,7 @@ class Lambertian : public Material
 public:
     Color Albedo;
 
-    Lambertian(const Color A) : Albedo(A) {}
+    Lambertian(const Color& A) : Albedo(A) {}
     virtual ~Lambertian() {}
 
     virtual bool Scatter(const Ray& RIn, const HitRecord& Rec, Color& Attenuation, Ray& Scattered) const override;

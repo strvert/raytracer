@@ -93,15 +93,15 @@ int main()
     Sprt.setScale(-1.0, -1.0);
 
     HitableList List;
-    // List.Add(std::make_unique<Sphere>(
-    //             Vec<float>(0, 0, -1), 0.5,
-    //             std::make_shared<Lambertian>(Color::FromRGBA256(204, 77, 77))));
+    List.Add(std::make_unique<Sphere>(
+                Vec<float>(0, 0.8, -1), 0.5,
+                std::make_shared<Lambertian>(Color::FromRGBA256(204, 77, 77))));
     List.Add(std::make_unique<Sphere>(
                 Vec<float>(-0.6, 0, -1), 0.5,
-                std::make_shared<Metal>(Color::FromRGBA256(204, 204, 204))));
+                std::make_shared<Metal>(Color::FromRGBA256(204, 204, 204), 0)));
     List.Add(std::make_unique<Sphere>(
                 Vec<float>(0.6, 0, -1), 0.5,
-                std::make_shared<Lambertian>(Color::FromRGBA256(204, 153, 51))));
+                std::make_shared<Metal>(Color::FromRGBA256(204, 153, 51), 0.3)));
     List.Add(std::make_unique<Sphere>(
                 Vec<float>(0.0, -100.5, -1), 100,
                 std::make_shared<Lambertian>(Color::FromRGBA256(204, 255, 255))));
