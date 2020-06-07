@@ -10,11 +10,17 @@ set(CMAKE_CXX_COMPILER clang++)
 
 add_executable(${CMAKE_PROJECT_NAME}
     src/main.cpp
-    src/vec3.cpp
+    src/vec.cpp
+    src/color.cpp
     src/ray.cpp
     src/camera.cpp
     src/sphere.cpp
     src/hitable.cpp
+    src/utils.cpp
+
+    src/mats/material.cpp
+    src/mats/lambertian.cpp
+    src/mats/metallic.cpp
     )
 
 target_include_directories(${CMAKE_PROJECT_NAME}
@@ -23,7 +29,8 @@ target_include_directories(${CMAKE_PROJECT_NAME}
     )
 
 target_compile_options(${CMAKE_PROJECT_NAME}
-    PRIVATE -O0 -Wall -g3
+    # PRIVATE -Ofast -march=native -Wall
+    PRIVATE -O0 -g3 -Wall
     )
 
 target_link_libraries(${CMAKE_PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT} sfml-graphics sfml-system sfml-window)

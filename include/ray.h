@@ -1,22 +1,23 @@
 #ifndef RAY_H
 #define RAY_H
 
-#include "vec3.h"
-#include "color.h"
+#include "vec.h"
+
+struct Color;
 
 class Ray
 {
 private:
-    Vec3f Orig;
-    Vec3f Dir;
+    Vec<float> Orig;
+    Vec<float> Dir;
 
 public:
     Ray() {}
-    Ray(const Vec3f& Orig, const Vec3f& Dir) : Orig(Orig), Dir(Dir) {}
+    Ray(const Vec<float>& Orig, const Vec<float>& Dir) : Orig(Orig), Dir(Dir) {}
 
-    inline Vec3f Origin() const { return Orig; }
-    inline Vec3f Direction() const { return Dir; }
-    inline Vec3f PointAtParameter(float t) const { return Orig + t*Dir; }
+    inline Vec<float> Origin() const { return Orig; }
+    inline Vec<float> Direction() const { return Dir; }
+    inline Vec<float> PointAtParameter(float t) const { return Orig + t*Dir; }
     Color ToScreenLerpColor(Color Col1, Color Col2) const;
 };
 

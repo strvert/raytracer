@@ -9,7 +9,7 @@ bool Sphere::Hit(const Ray& R, float TMin, float TMax, HitRecord& Rec) const
     // B = 𝕕·(𝕒-𝕔)
     // C = (𝕒-𝕔)·(𝕒-𝕔)-r²
 
-    Vec3f OC = R.Origin() - Center();
+    Vec<float> OC = R.Origin() - Center();
     float A = R.Direction().Dot(R.Direction());
     float B = R.Direction().Dot(OC);
     float C = OC.Dot(OC) - Radius() * Radius();
@@ -23,6 +23,7 @@ bool Sphere::Hit(const Ray& R, float TMin, float TMax, HitRecord& Rec) const
             Rec.T = T;
             Rec.P = R.PointAtParameter(T);
             Rec.N = (Rec.P - Center()) / Radius();
+            Rec.Mat = Mat;
             return true;
         }
         T = (-B + std::sqrt(D)) / A;
@@ -31,6 +32,7 @@ bool Sphere::Hit(const Ray& R, float TMin, float TMax, HitRecord& Rec) const
             Rec.T = T;
             Rec.P = R.PointAtParameter(T);
             Rec.N = (Rec.P - Center()) / Radius();
+            Rec.Mat = Mat;
             return true;
         }
     }

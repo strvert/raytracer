@@ -1,24 +1,27 @@
 #ifndef SPHERE_H
 #define SPHERE_H
+#include <memory>
 
-#include "vec3.h"
-#include "color.h"
+#include "vec.h"
 #include "hitable.h"
+#include "mats/material.h"
 
 class Ray;
 
 class Sphere: public Hitable
 {
 private:
-    Vec3f Cntr;
+    Vec<float> Cntr;
     float Rds;
+    std::shared_ptr<Material> Mat;
 
 public:
-    Sphere(Vec3f Center, float Radius): Cntr(Center), Rds(Radius) {}
-    Sphere(Vec3f Center): Cntr(Center), Rds(0.5) {}
+
+    Sphere(Vec<float> Center, float Radius, std::shared_ptr<Material> Mat): Cntr(Center), Rds(Radius), Mat(Mat) {}
+    Sphere(Vec<float> Center, std::shared_ptr<Material> Mat): Cntr(Center), Rds(0.5), Mat(Mat) {}
     virtual ~Sphere() {}
 
-    inline Vec3f Center() const { return Cntr; };
+    inline Vec<float> Center() const { return Cntr; };
     inline float Radius() const { return Rds; };
 
     virtual bool Hit(const Ray& R, float TMin, float TMax, HitRecord& Rec) const override;

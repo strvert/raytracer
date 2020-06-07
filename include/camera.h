@@ -1,25 +1,26 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "ray.h"
+#include "vec.h"
+class Ray;
 
 class Camera
 {
 public:
-    Vec3f LowerLeftCorner;
-    Vec3f Horizonal;
-    Vec3f Vertical;
-    Vec3f Origin;
+    Vec<float> LowerLeftCorner;
+    Vec<float> Horizonal;
+    Vec<float> Vertical;
+    Vec<float> Origin;
 
     Camera()
     {
-        LowerLeftCorner = Vec3f(-2.0, -1.0, -1.0);
-        Horizonal = Vec3f(4.0, 0.0, 0.0);
-        Vertical = Vec3f(0.0, 2.0, 0.0);
-        Origin = Vec3f(0.0, 0.0, 0.0);
+        LowerLeftCorner = Vec<float>(-2.0, -1.0, -1.0);
+        Horizonal = Vec<float>(4.0, 0.0, 0.0);
+        Vertical = Vec<float>(0.0, 2.0, 0.0);
+        Origin = Vec<float>(0.0, 0.0, 0.0);
     }
 
-    Ray GetRay(float U, float V) const { return Ray(Origin, (LowerLeftCorner + U*Horizonal + V*Vertical) - Origin); }
+    Ray GetRay(float U, float V) const;
 };
 
 #endif // CAMERA_H

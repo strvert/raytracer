@@ -3,13 +3,17 @@
 
 #include <vector>
 #include <memory>
-#include "ray.h"
+#include "vec.h"
+
+class Ray;
+class Material;
 
 struct HitRecord
 {
     float T;
-    Vec3f P;
-    Vec3f N;
+    Vec<float> P;
+    Vec<float> N;
+    std::shared_ptr<Material> Mat;
 };
 
 class Hitable
