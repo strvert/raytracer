@@ -29,8 +29,8 @@ target_include_directories(${CMAKE_PROJECT_NAME}
     )
 
 target_compile_options(${CMAKE_PROJECT_NAME}
-    # PRIVATE -Ofast -march=native -Wall
-    PRIVATE -O0 -g3 -Wall
+    PRIVATE -Ofast -march=native -Wall
+    # PRIVATE -O0 -g3 -Wall
     )
 
 target_link_libraries(${CMAKE_PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT} sfml-graphics sfml-system sfml-window)
