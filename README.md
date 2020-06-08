@@ -17,5 +17,8 @@
 - 並列レンダリングのコマンドラインオプション化
 - わすれた
 
+## 気になっていること
+- 並列度の割に並列動作時の速度遅くないですか？ 何かミスしているかも？
+
 ## サンプル
 ![sample.png](https://raw.githubusercontent.com/strvworks/raytracer/master/resources/image.png)
