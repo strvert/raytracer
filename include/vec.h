@@ -38,7 +38,7 @@ public:
     }
 
     inline const Vec<T>& operator+ () const { return *this; }
-    inline Vec<T>& operator- () const { return Vec<T>(-X(), -Y(), -Z()); }
+    inline Vec<T> operator- () const { return Vec<T>(-X(), -Y(), -Z()); }
     inline T operator[] (int i) const { return E[i]; }
     inline T& operator[] (int i) { return E[i]; };
 

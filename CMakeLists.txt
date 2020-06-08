@@ -20,6 +20,7 @@ add_executable(${CMAKE_PROJECT_NAME}
 
     src/mats/material.cpp
     src/mats/lambertian.cpp
+    src/mats/dielectric.cpp
     src/mats/metallic.cpp
     )
 

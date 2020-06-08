@@ -16,8 +16,8 @@
 
 const unsigned int WINDOW_WIDTH = 1200;
 const unsigned int WINDOW_HEIGHT = 600;
-const unsigned int NS = 60;
-const unsigned int RENDER_CELL_SIZE = 50;
+const unsigned int NS = 200;
+const unsigned int RENDER_CELL_SIZE = 40;
 const bool PARALLEL = true;
 
 void SetPixel(sf::Texture& Tex, unsigned X, unsigned Y, Color C)
@@ -75,7 +75,7 @@ void RenderProc(sf::Texture& Tex, const Camera& Cam, const Hitable& List, const 
             Data[((j-Y)*SizeX + (i-X))*4] = Avg.R256();
             Data[((j-Y)*SizeX + (i-X))*4+1] = Avg.G256();
             Data[((j-Y)*SizeX + (i-X))*4+2] = Avg.B256();
-            Data[((j-Y)*SizeX + (i-X))*4+3] = Avg.A256();
+            Data[((j-Y)*SizeX + (i-X))*4+3] = 255;
         }
     }
     Tex.update(reinterpret_cast<sf::Uint8*>(Data.data()), SizeX, SizeY, X, Y);
@@ -98,10 +98,13 @@ int main()
                 std::make_shared<Lambertian>(Color::FromRGBA256(204, 77, 77))));
     List.Add(std::make_unique<Sphere>(
                 Vec<float>(-0.6, 0, -1), 0.5,
-                std::make_shared<Metal>(Color::FromRGBA256(204, 204, 204), 0)));
+                std::make_shared<Dielectric>(1.5)));
+    List.Add(std::make_unique<Sphere>(
+                Vec<float>(-0.6, 0, -1), -0.48,
+                std::make_shared<Dielectric>(1.5)));
     List.Add(std::make_unique<Sphere>(
                 Vec<float>(0.6, 0, -1), 0.5,
-                std::make_shared<Metal>(Color::FromRGBA256(204, 153, 51), 0.3)));
+                std::make_shared<Metal>(Color::FromRGBA256(204, 153, 51), 0.1)));
     List.Add(std::make_unique<Sphere>(
                 Vec<float>(0.0, -100.5, -1), 100,
                 std::make_shared<Lambertian>(Color::FromRGBA256(204, 255, 255))));

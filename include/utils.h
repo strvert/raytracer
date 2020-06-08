@@ -15,9 +15,18 @@ private:
 
 public:
     static Vec<float> RandInUnitSphere();
-    static Vec<float> Refrect(const Vec<float>& V, const Vec<float>& N);
-    static double RandZeroToOne();
-    static double RandMinusOneToPlusOne();
+    static Vec<float> Reflect(const Vec<float>& V, const Vec<float>& N);
+    static bool Refract(const Vec<float>& V, const Vec<float>& N, float NiOverNt, Vec<float>& Refracted);
+    static float Schlink(const float Cosine, const float RefIdx);
+    inline static double RandZeroToOne()
+    {
+        return Utils::RZeroToOne(Utils::Mt);
+    }
+
+    inline static double RandMinusOneToPlusOne()
+    {
+        return Utils::RMinusOneToPlusOne(Utils::Mt);
+    }
 };
 
 #endif // UTILS_H

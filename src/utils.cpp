@@ -19,17 +19,30 @@ Vec<float> Utils::RandInUnitSphere()
     return P;
 }
 
-Vec<float> Utils::Refrect(const Vec<float>& V, const Vec<float>& N)
+Vec<float> Utils::Reflect(const Vec<float>& V, const Vec<float>& N)
 {
     return V - 2*V.Dot(N)*N;
 }
 
-double Utils::RandZeroToOne()
+bool Utils::Refract(const Vec<float>& V, const Vec<float>& N, float NiOverNt, Vec<float>& Refracted)
 {
-    return Utils::RZeroToOne(Utils::Mt);
+    Vec<float> UnitVec = V.Normalize();
+    float Dt = UnitVec.Dot(N);
+    float D = 1.0 - NiOverNt*NiOverNt*(1 - Dt*Dt);
+    if (D > 0)
+    {
+        Refracted = NiOverNt*(UnitVec - N*Dt) - N*std::sqrt(D);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
-double Utils::RandMinusOneToPlusOne()
+float Utils::Schlink(const float Cosine, const float RefIdx)
 {
-    return Utils::RMinusOneToPlusOne(Utils::Mt);
+    float R0 = (1-RefIdx) / (1+RefIdx);
+    R0 = R0*R0;
+    return R0 + (1-R0)*std::pow(1-Cosine, 5);
 }
