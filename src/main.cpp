@@ -16,9 +16,9 @@
 
 constexpr const unsigned int WINDOW_WIDTH = 1200;
 constexpr const unsigned int WINDOW_HEIGHT = 600;
-constexpr const unsigned int NS = 10;
+constexpr const unsigned int NS = 100;
 constexpr const unsigned int RENDER_CELL_SIZE = 40;
-constexpr const bool PARALLEL = false;
+constexpr const bool PARALLEL = true;
 
 Color ScreenColor(const Ray& R, const Hitable& World, int Depth)
 {
