@@ -14,23 +14,11 @@
 #include "camera.h"
 #include "mats/materials.h"
 
-const unsigned int WINDOW_WIDTH = 1200;
-const unsigned int WINDOW_HEIGHT = 600;
-const unsigned int NS = 200;
-const unsigned int RENDER_CELL_SIZE = 40;
-const bool PARALLEL = true;
-
-void SetPixel(sf::Texture& Tex, unsigned X, unsigned Y, Color C)
-{
-    auto Size = Tex.getSize();
-    Tex.update(reinterpret_cast<sf::Uint8*>(&C), 1, 1, Size.x - X, Size.y - Y);
-}
-
-void SetLinePixels(sf::Texture& Tex, unsigned X, unsigned Y, const std::vector<Color>& C)
-{
-    auto Size = Tex.getSize();
-    Tex.update(reinterpret_cast<const sf::Uint8*>(C.data()), C.size(), 1, Size.x - X, Size.y - Y);
-}
+constexpr const unsigned int WINDOW_WIDTH = 1200;
+constexpr const unsigned int WINDOW_HEIGHT = 600;
+constexpr const unsigned int NS = 10;
+constexpr const unsigned int RENDER_CELL_SIZE = 40;
+constexpr const bool PARALLEL = false;
 
 Color ScreenColor(const Ray& R, const Hitable& World, int Depth)
 {

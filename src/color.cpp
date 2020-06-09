@@ -1,6 +1,6 @@
 #include "color.h"
 
-Color operator*(const float Val, const Color &C)
+ Color operator*(const float Val, const Color &C)
 {
     return Color(Val * C.R, Val * C.G, Val * C.B, Val * C.A);
 }

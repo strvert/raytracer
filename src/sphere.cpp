@@ -10,12 +10,16 @@ bool Sphere::Hit(const Ray& R, float TMin, float TMax, HitRecord& Rec) const
     // C = (𝕒-𝕔)·(𝕒-𝕔)-r²
 
     Vec<float> OC = R.Origin() - Center();
-    float A = R.Direction().Dot(R.Direction());
+    float A = R.Direction().SquaredLength();
     float B = R.Direction().Dot(OC);
     float C = OC.Dot(OC) - Radius() * Radius();
     float D = (B*B - A*C);
 
-    if (D > 0)
+    Vec<float> Dn = R.Direction().Normalize();
+    float E = ((Dn.Dot(-OC))*Dn+OC).Length();
+
+
+    if (E < std::abs(Radius()))
     {
         float T = (-B - std::sqrt(D)) / A;
         if (T < TMax && T > TMin)

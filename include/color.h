@@ -10,27 +10,27 @@ struct Color
     float B;
     float A;
 
-    Color(): R(0), G(0), B(0), A(0) {}
-    Color(float V): R(V), G(V), B(V), A(V) {}
-    Color(float R, float G, float B): R(R), G(G), B(B), A(1) {}
-    Color(float R, float G, float B, float A): R(R), G(G), B(B), A(A) {}
+    constexpr Color(): R(0), G(0), B(0), A(0) {}
+    constexpr Color(float V): R(V), G(V), B(V), A(V) {}
+    constexpr Color(float R, float G, float B): R(R), G(G), B(B), A(1) {}
+    constexpr Color(float R, float G, float B, float A): R(R), G(G), B(B), A(A) {}
 
-    static Color FromRGBA256(std::uint8_t InR, std::uint8_t InG, std::uint8_t InB, std::uint8_t InA)
+    static constexpr Color FromRGBA256(const std::uint8_t InR, const std::uint8_t InG, const std::uint8_t InB, const std::uint8_t InA)
     {
         return Color(InR / 255.0, InG / 255.0, InB / 255.0, InA / 255.0);
     }
 
-    static Color FromRGBA256(std::uint8_t InR, std::uint8_t InG, std::uint8_t InB)
+    static constexpr Color FromRGBA256(std::uint8_t InR, std::uint8_t InG, std::uint8_t InB)
     {
         return Color(InR / 255.0, InG / 255.0, InB / 255.0, 1.0);
     }
 
-    std::uint8_t R256() { return R * 255; }
-    std::uint8_t G256() { return G * 255; }
-    std::uint8_t B256() { return B * 255; }
-    std::uint8_t A256() { return A * 255; }
+    constexpr std::uint8_t R256() { return R * 255; }
+    constexpr std::uint8_t G256() { return G * 255; }
+    constexpr std::uint8_t B256() { return B * 255; }
+    constexpr std::uint8_t A256() { return A * 255; }
 
-    Color& operator+= (const Color& C)
+    constexpr Color& operator+= (const Color& C)
     {
         R += C.R;
         G += C.G;
@@ -39,7 +39,7 @@ struct Color
         return *this;
     }
 
-    Color& operator-= (const Color& C)
+    constexpr Color& operator-= (const Color& C)
     {
         R += C.R;
         G += C.G;
